@@ -126,12 +126,22 @@ function Satori({
   React.useEffect(() => {
     if (!container) return
 
-    const onResize = () => {
+    const withDebounce = (fn) => {
+      let timeout
+      return (...args) => {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          fn(...args)
+        }, 50)
+      }
+    }
+
+    const onResize = withDebounce(() => {
       setSize({
         width: container.offsetWidth,
         height: container.offsetHeight,
       })
-    }
+    })
 
     const resizeObserver = new ResizeObserver(onResize)
     resizeObserver.observe(container)
