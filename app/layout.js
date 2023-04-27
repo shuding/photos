@@ -2,7 +2,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Link from 'next/link'
 
-import { SatoriBoundary } from './satori'
+import { SatoriBoundary } from '@/satori'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,8 +24,8 @@ function PhotoLink({ id }) {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang='en' className='h-full'>
-      <body className={inter.className + ' h-full'}>
+    <html lang='en'>
+      <body className={inter.className}>
         <div className='container m-auto p-4 mb-4 text-center'>
           <Link href='/'>
             <h1 className='text-4xl font-medium tracking-tight mt-12 mb-8 text-blue-800 hover:text-blue-600 transition-colors duration-200 inline-block'>

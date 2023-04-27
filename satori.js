@@ -57,7 +57,7 @@ function SatoriRenderer({ children, ...props }) {
       <SatoriContext.Provider value={onChildLoad}>
         {children}
       </SatoriContext.Provider>
-      <Satori {...props}>{remoteChildren}</Satori>
+      <SatoriImpl {...props}>{remoteChildren}</SatoriImpl>
     </>
   )
 }
@@ -71,12 +71,19 @@ export function SatoriAnimated({ children }) {
 
   if (!onChildLoad) return null
   return null
-  return <Satori>{children}</Satori>
 }
 
 export function SatoriEscape({ children }) {
   return (
     <SatoriContext.Provider value={false}>{children}</SatoriContext.Provider>
+  )
+}
+
+export function Satori({ children }) {
+  return (
+    <SatoriBoundary>
+      <SatoriAnimated>{children}</SatoriAnimated>
+    </SatoriBoundary>
   )
 }
 
@@ -102,7 +109,7 @@ class Container extends React.Component {
   }
 }
 
-function Satori({
+function SatoriImpl({
   spring = {
     type: 'spring',
     damping: 17,

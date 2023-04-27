@@ -1,10 +1,13 @@
 'use client'
 
-import { SatoriAnimated } from './satori'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { SatoriAnimated } from '@/satori'
 
 export default function Photos() {
   const Router = useRouter()
+  const [focusedPhoto, setFocusedPhoto] = useState(null)
+
   return (
     <SatoriAnimated>
       <div
@@ -12,13 +15,11 @@ export default function Photos() {
         style={{
           display: 'flex',
           justifyContent: 'center',
-          justifyItems: 'center',
           alignItems: 'center',
-          alignContent: 'center',
           flexDirection: 'row',
           width: '100%',
           height: '100%',
-          gap: 32,
+          gap: 8,
         }}
       >
         {Array(5)
@@ -27,18 +28,17 @@ export default function Photos() {
             <img
               key={`photo photo-${i + 1}`}
               src={`/photos/${i + 1}.jpg`}
+              className='cursor-pointer'
               style={{
-                flexBasis: '18%',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                borderRadius: '10px',
-                boxShadow: '0 5px 30px -10px rgba(0, 0, 0, 0.8)',
+                width: focusedPhoto === i ? 300 : 180,
+                height: 400,
+                borderRadius: 0,
+                objectFit: 'cover',
                 zIndex: 1,
               }}
-              className='transition-transform duration-300 transform hover:scale-[1.02] cursor-pointer'
-              onClick={() => {
-                Router.push(`/${i + 1}`)
-              }}
+              onClick={() => Router.push(`/${i + 1}`)}
+              onMouseEnter={() => setFocusedPhoto(i)}
+              onMouseLeave={() => setFocusedPhoto(null)}
             />
           ))}
       </div>

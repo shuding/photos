@@ -1,16 +1,13 @@
 import React from 'react'
-import { SatoriAnimated } from '../satori'
+import { SatoriAnimated } from '../../satori'
 
-export const dynamic = 'force-static'
 export const dynamicParams = false
 
 export function generateStaticParams() {
   return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }, { id: '5' }]
 }
 
-export default function Photo({ params }) {
-  const { id } = params
-
+export default function Photo({ params: { id } }) {
   return (
     <SatoriAnimated>
       <div
@@ -19,7 +16,6 @@ export default function Photo({ params }) {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          justifyItems: 'center',
           alignItems: 'center',
           alignContent: 'center',
           flexDirection: +id % 2 ? 'row' : 'column',
@@ -35,8 +31,8 @@ export default function Photo({ params }) {
             flexBasis: '50%',
             maxWidth: '100%',
             maxHeight: '100%',
-            borderRadius: '10px',
-            boxShadow: '0 5px 30px -10px rgba(0, 0, 0, 0.8)',
+            borderRadius: 10,
+            objectFit: 'cover',
             zIndex: 2,
           }}
         />
@@ -45,7 +41,6 @@ export default function Photo({ params }) {
           style={{
             margin: 0,
             width: 400,
-            letterSpacing: -0.02,
             zIndex: 1,
           }}
         >{`Photo ${id}: lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}</p>
