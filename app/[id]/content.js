@@ -83,7 +83,7 @@ export default function Photo({ params: { id } }) {
               width: 400,
               maxWidth: '100%',
               minHeight: wrap || !row ? 150 : 0,
-              lineHeight: 1.5,
+              // lineHeight: 1.5,
               zIndex: '1',
               display: 'flex',
               flexDirection: 'column',
