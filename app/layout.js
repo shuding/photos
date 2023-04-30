@@ -46,6 +46,41 @@ export default function RootLayout({ children }) {
           property='twitter:image'
           content='https://shu-gallery.vercel.app/og.png'
         />
+        <link rel='preload' href='/photos/1.jpg' as='image' />
+        <link rel='preload' href='/photos/2.jpg' as='image' />
+        <link rel='preload' href='/photos/3.jpg' as='image' />
+        <link rel='preload' href='/photos/4.jpg' as='image' />
+        <link rel='preload' href='/photos/5.jpg' as='image' />
+        <link
+          rel='preload'
+          href='/photos/1.jpg'
+          as='fetch'
+          crossorigin='anonymous'
+        />
+        <link
+          rel='preload'
+          href='/photos/2.jpg'
+          as='fetch'
+          crossorigin='anonymous'
+        />
+        <link
+          rel='preload'
+          href='/photos/3.jpg'
+          as='fetch'
+          crossorigin='anonymous'
+        />
+        <link
+          rel='preload'
+          href='/photos/4.jpg'
+          as='fetch'
+          crossorigin='anonymous'
+        />
+        <link
+          rel='preload'
+          href='/photos/5.jpg'
+          as='fetch'
+          crossorigin='anonymous'
+        />
       </head>
       <body className={inter.className}>
         <div className='container m-auto p-4 mb-4 text-center'>
