@@ -131,7 +131,7 @@ export default function Photos() {
             .<div className='my-2' />
             Crafted by{' '}
             <a
-              href='https://twitter.com/joqim/status/1652397711818358784'
+              href='https://twitter.com/shuding_/status/1652485125085581314'
               target='_blank'
               className='underline hover:text-slate-800'
             >
