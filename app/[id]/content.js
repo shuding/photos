@@ -1,5 +1,6 @@
 'use client'
 
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { SatoriAnimated, SatoriEscape } from '../../satori'
 
@@ -26,7 +27,14 @@ export default function Photo({ params: { id } }) {
 
   const row = !wrap && +id % 2
 
-  return (
+  return <>
+    <Head>
+      <link rel="preload" href="/photos/1.jpg" as="image"/>
+      <link rel="preload" href="/photos/2.jpg" as="image"/>
+      <link rel="preload" href="/photos/3.jpg" as="image"/>
+      <link rel="preload" href="/photos/4.jpg" as="image"/>
+      <link rel="preload" href="/photos/5.jpg" as="image"/>
+    </Head>
     <SatoriAnimated>
       <div
         key='main-container'
@@ -133,5 +141,5 @@ export default function Photo({ params: { id } }) {
         </SatoriEscape>
       </div>
     </SatoriAnimated>
-  )
+  </>
 }
