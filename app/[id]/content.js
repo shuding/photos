@@ -29,11 +29,11 @@ export default function Photo({ params: { id } }) {
 
   return <>
     <Head>
-      <link rel="preload" href="/photos/1.jpg" as="image"/>
-      <link rel="preload" href="/photos/2.jpg" as="image"/>
-      <link rel="preload" href="/photos/3.jpg" as="image"/>
-      <link rel="preload" href="/photos/4.jpg" as="image"/>
-      <link rel="preload" href="/photos/5.jpg" as="image"/>
+      <link rel="preload" href="/photos/1.jpg" as="fetch"/>
+      <link rel="preload" href="/photos/2.jpg" as="fetch"/>
+      <link rel="preload" href="/photos/3.jpg" as="fetch"/>
+      <link rel="preload" href="/photos/4.jpg" as="fetch"/>
+      <link rel="preload" href="/photos/5.jpg" as="fetch"/>
     </Head>
     <SatoriAnimated>
       <div
