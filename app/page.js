@@ -82,9 +82,9 @@ export default function Photos() {
                 }}
                 onPointerUp={() => {
                   Router.push(`/${i + 1}`)
-                  setTimeout(() => {
+                  //setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }, 100)
+                  // }, 100)
                 }}
                 onMouseEnter={() => !isTouchDevice && setFocusedPhoto(i)}
                 onMouseLeave={() => !isTouchDevice && setFocusedPhoto(null)}
