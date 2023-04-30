@@ -55,31 +55,31 @@ export default function RootLayout({ children }) {
           rel='preload'
           href='/photos/1.jpg'
           as='fetch'
-          crossorigin='anonymous'
+          crossOrigin='anonymous'
         />
         <link
           rel='preload'
           href='/photos/2.jpg'
           as='fetch'
-          crossorigin='anonymous'
+          crossOrigin='anonymous'
         />
         <link
           rel='preload'
           href='/photos/3.jpg'
           as='fetch'
-          crossorigin='anonymous'
+          crossOrigin='anonymous'
         />
         <link
           rel='preload'
           href='/photos/4.jpg'
           as='fetch'
-          crossorigin='anonymous'
+          crossOrigin='anonymous'
         />
         <link
           rel='preload'
           href='/photos/5.jpg'
           as='fetch'
-          crossorigin='anonymous'
+          crossOrigin='anonymous'
         />
       </head>
       <body className={inter.className}>
