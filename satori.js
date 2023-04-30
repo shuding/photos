@@ -37,6 +37,7 @@ export function SatoriBoundary({ children }) {
         position: 'relative',
         width: '100%',
         height: '100%',
+        perspective: 1000,
       }}
     >
       <Container content={children}>
@@ -297,6 +298,7 @@ function SatoriImpl({ container, children }) {
             width: node.width,
             height: node.height,
             display: 'block',
+            willChange: 'top, left, width, height, opacity, transform',
           }
 
           if (node.props.__kind === 'escape') {
@@ -349,6 +351,7 @@ function SatoriImpl({ container, children }) {
           return (
             <Type
               key={typeof node.key === 'undefined' ? i : node.key}
+              ref={node.ref}
               {...node.props}
               variants={{
                 initial: {
@@ -378,11 +381,16 @@ function SatoriImpl({ container, children }) {
               transition={{
                 type: 'spring',
                 damping: 17,
-                mass: 0.2,
+                mass: 0.3,
                 velocity: -4,
                 stiffness: 100,
                 zIndex: {
                   delay: 0.8,
+                },
+                opacity: {
+                  type: 'tween',
+                  duration: 0.8,
+                  delay: Math.random() * 0.3,
                 },
               }}
               initial='initial'

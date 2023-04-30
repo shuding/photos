@@ -74,6 +74,10 @@ export default function Photo({ params: { id } }) {
               objectFit: 'cover',
               zIndex: '2',
               boxShadow: 'rgba(14, 21, 72, 0.45) 0px 25px 36px -12px',
+              transformStyle: 'preserve-3d',
+              transform: row
+                ? `rotateX(0deg) rotateY(8deg)`
+                : 'rotateX(-3deg) rotateY(0deg)',
             }}
           />
           <p

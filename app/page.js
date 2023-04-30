@@ -79,11 +79,12 @@ export default function Photos() {
                   objectFit: 'cover',
                   boxShadow: '0 10px 20px -8px rgba(14, 21, 72, 0.45)',
                   zIndex: '1',
+                  transform: 'rotateX(0deg) rotateY(0deg)',
                 }}
                 onPointerUp={() => {
                   Router.push(`/${i + 1}`)
                   //setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
                   // }, 100)
                 }}
                 onMouseEnter={() => !isTouchDevice && setFocusedPhoto(i)}
