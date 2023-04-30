@@ -55,7 +55,7 @@ function SatoriRenderer({ children, ...props }) {
   return (
     <>
       <SatoriContext.Provider value={onChildLoad}>
-        {children}
+        <>{children}</>
       </SatoriContext.Provider>
       <SatoriImpl {...props}>{remoteChildren}</SatoriImpl>
     </>
@@ -87,6 +87,38 @@ export function Satori({ children }) {
   )
 }
 
+function normalizeChildren(children) {
+  if (typeof children === 'string') {
+    return children
+  }
+  if (Array.isArray(children)) {
+    return children.map(normalizeChildren)
+  }
+  if (typeof children === 'object' && children) {
+    if (typeof children.type === 'function') {
+      if (children.type === SatoriEscape) {
+        return {
+          type: 'div',
+          props: {
+            style: children.props.style,
+            __kind: 'escape',
+            __children: children.props.children,
+          },
+        }
+      }
+      return children
+    }
+    return {
+      ...children,
+      props: {
+        ...children.props,
+        children: normalizeChildren(children.props.children),
+      },
+    }
+  }
+  return children
+}
+
 class Container extends React.Component {
   componentDidMount() {
     const el = findDOMNode(this).parentElement
@@ -109,20 +141,7 @@ class Container extends React.Component {
   }
 }
 
-function SatoriImpl({
-  spring = {
-    type: 'spring',
-    damping: 17,
-    mass: 0.8,
-    velocity: 4,
-    stiffness: 120,
-    zIndex: {
-      delay: 0.5,
-    },
-  },
-  container,
-  children,
-}) {
+function SatoriImpl({ container, children }) {
   // const [debug, setDebug] = React.useState(null)
   const [currentState, setCurrentState] = React.useState([])
   const [size, setSize] = React.useState({
@@ -133,22 +152,12 @@ function SatoriImpl({
   React.useEffect(() => {
     if (!container) return
 
-    const withDebounce = (fn) => {
-      let timeout
-      return (...args) => {
-        clearTimeout(timeout)
-        timeout = setTimeout(() => {
-          fn(...args)
-        }, 50)
-      }
-    }
-
-    const onResize = withDebounce(() => {
+    const onResize = () => {
       setSize({
         width: container.offsetWidth,
         height: container.offsetHeight,
       })
-    })
+    }
 
     const resizeObserver = new ResizeObserver(onResize)
     resizeObserver.observe(container)
@@ -165,7 +174,7 @@ function SatoriImpl({
     ;(async () => {
       const nodes = []
 
-      const svg = await satori(children, {
+      const svg = await satori(normalizeChildren(children), {
         fonts: await loadFonts,
         width: size.width,
         height: size.height,
@@ -276,38 +285,108 @@ function SatoriImpl({
       <AnimatePresence>
         {currentState.map((node, i) => {
           const Type = motion[node.type]
+          const styles = {
+            position: 'absolute',
+            ...node.props.style,
+            maxHeight: 'initial',
+            maxWidth: 'initial',
+            minHeight: 'initial',
+            minWidth: 'initial',
+            top: node.top,
+            left: node.left,
+            width: node.width,
+            height: node.height,
+            display: 'block',
+          }
+
+          if (node.props.__kind === 'escape') {
+            return (
+              <Type
+                key={'__escape__'}
+                variants={{
+                  initial: {
+                    opacity: 0,
+                    ...styles,
+                    transition: {
+                      zIndex: {
+                        delay: 0.5,
+                      },
+                    },
+                  },
+                  exit: {
+                    opacity: 0,
+                    ...styles,
+                    transition: {
+                      zIndex: {
+                        delay: 0.5,
+                      },
+                    },
+                  },
+                  current: {
+                    opacity: 1,
+                    ...styles,
+                  },
+                }}
+                animate='current'
+                transition={{
+                  type: 'spring',
+                  damping: 17,
+                  mass: 0.2,
+                  velocity: -4,
+                  stiffness: 100,
+                  zIndex: {
+                    delay: 0.8,
+                  },
+                }}
+                initial='initial'
+                exit='exit'
+              >
+                {node.props.__children}
+              </Type>
+            )
+          }
+
           return (
             <Type
               key={typeof node.key === 'undefined' ? i : node.key}
               {...node.props}
-              animate={{
-                position: 'absolute',
-                top: node.top,
-                left: node.left,
-                width: node.width,
-                height: node.height,
-                opacity: 1,
-                ...node.props.style,
+              variants={{
+                initial: {
+                  opacity: 0,
+                  ...styles,
+                  transition: {
+                    zIndex: {
+                      delay: 0.5,
+                    },
+                  },
+                },
+                exit: {
+                  opacity: 0,
+                  ...styles,
+                  transition: {
+                    zIndex: {
+                      delay: 0.5,
+                    },
+                  },
+                },
+                current: {
+                  opacity: 1,
+                  ...styles,
+                },
               }}
-              transition={spring}
-              initial={{
-                position: 'absolute',
-                top: node.top,
-                left: node.left,
-                width: node.width,
-                height: node.height,
-                opacity: 0,
-                ...node.props.style,
+              animate='current'
+              transition={{
+                type: 'spring',
+                damping: 17,
+                mass: 0.2,
+                velocity: -4,
+                stiffness: 100,
+                zIndex: {
+                  delay: 0.8,
+                },
               }}
-              exit={{
-                position: 'absolute',
-                top: node.top,
-                left: node.left,
-                width: node.width,
-                height: node.height,
-                opacity: 0,
-                ...node.props.style,
-              }}
+              initial='initial'
+              exit='exit'
             >
               {node.textContent}
             </Type>

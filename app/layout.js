@@ -15,7 +15,7 @@ function PhotoLink({ id }) {
   return (
     <Link
       href={`/${id}`}
-      className='px-2 text-blue-800 hover:text-blue-600 transition-colors duration-200'
+      className='px-1.5 text-slate-700 hover:text-blue-600 tracking-tight'
     >
       Photo {id}
     </Link>
@@ -28,18 +28,18 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <div className='container m-auto p-4 mb-4 text-center'>
           <Link href='/'>
-            <h1 className='text-4xl font-medium tracking-tight mt-12 mb-8 text-blue-800 hover:text-blue-600 transition-colors duration-200 inline-block'>
-              Shu’s Photos
+            <h1 className='text-2xl font-medium tracking-tight mt-12 mb-8 text-slate-800 hover:text-blue-600 inline-block'>
+              All Photos
             </h1>
           </Link>
-          <br />
+          <div></div>
           <PhotoLink id='1' />
           <PhotoLink id='2' />
           <PhotoLink id='3' />
           <PhotoLink id='4' />
           <PhotoLink id='5' />
         </div>
-        <div className='w-full relative px-8 h-[calc(100vh-280px)]'>
+        <div className='w-full relative px-8 pb-8 h-[calc(100vh-380px)] min-h-[400px]'>
           <SatoriBoundary>{children}</SatoriBoundary>
         </div>
       </body>

@@ -1,27 +1,19 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { SatoriAnimated, SatoriEscape } from '@/satori'
+import { SatoriAnimated, SatoriEscape } from '../../satori'
 
-const isTouchDevice =
-  typeof window !== 'undefined' &&
-  ('ontouchstart' in window ||
-    navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0)
+export const dynamicParams = false
 
-export default function Photos() {
-  const Router = useRouter()
-  const [focusedPhoto, setFocusedPhoto] = useState(null)
-  const [row, setRow] = useState(
-    (typeof window === 'undefined' ? 0 : window.innerWidth) > 960
+export default function Photo({ params: { id } }) {
+  const [wrap, setWrap] = useState(
+    (typeof window === 'undefined' ? 0 : window.innerWidth) < 960
   )
 
   useEffect(() => {
     const handleResize = () => {
-      setRow((r) => {
-        if (r !== window.innerWidth > 960) {
-          setFocusedPhoto(null)
+      setWrap((r) => {
+        if (r !== window.innerWidth < 960) {
           return !r
         }
         return r
@@ -31,6 +23,8 @@ export default function Photos() {
     handleResize()
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  const row = !wrap && +id % 2
 
   return (
     <SatoriAnimated>
@@ -50,55 +44,53 @@ export default function Photos() {
           key='photo-container'
           style={{
             display: 'flex',
-            justifyContent: row ? 'center' : 'flex-start',
+            flexWrap: 'nowrap',
+            justifyContent: wrap || !row ? 'flex-start' : 'center',
+            alignContent: 'center',
             alignItems: 'center',
+            justifyItems: 'center',
             flexDirection: row ? 'row' : 'column',
             width: '100%',
             minHeight: '100%',
-            gap: 8,
+            gap: 32,
             overflow: 'hidden',
           }}
         >
-          {Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <img
-                key={`photo photo-${i + 1}`}
-                src={`/photos/${i + 1}.jpg`}
-                className='cursor-pointer'
-                style={{
-                  width: row
-                    ? focusedPhoto === i
-                      ? 300
-                      : focusedPhoto === null
-                      ? 180
-                      : 150
-                    : '100%',
-                  height: row ? 380 : focusedPhoto === i ? 200 : 120,
-                  borderRadius: 0,
-                  objectFit: 'cover',
-                  boxShadow: '0 10px 20px -8px rgba(14, 21, 72, 0.45)',
-                  zIndex: '1',
-                }}
-                onPointerUp={() => {
-                  Router.push(`/${i + 1}`)
-                  setTimeout(() => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }, 100)
-                }}
-                onMouseEnter={() => !isTouchDevice && setFocusedPhoto(i)}
-                onMouseLeave={() => !isTouchDevice && setFocusedPhoto(null)}
-              />
-            ))}
-          {row ? null : (
-            <div
-              key='slot'
-              style={{
-                width: 32,
-                height: 32,
-              }}
-            ></div>
-          )}
+          <img
+            key={`photo photo-${id}`}
+            src={`/photos/${id}.jpg`}
+            style={{
+              ...(!wrap
+                ? {
+                    flex: row ? '0 0 40%' : '0 0 70%',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                  }
+                : {
+                    flex: '0 0 auto',
+                    width: '100%',
+                  }),
+              borderRadius: 10,
+              objectFit: 'cover',
+              zIndex: '2',
+              boxShadow: 'rgba(14, 21, 72, 0.45) 0px 25px 36px -12px',
+            }}
+          />
+          <p
+            key='photo-description'
+            className='text-slate-800'
+            style={{
+              width: 400,
+              maxWidth: '100%',
+              minHeight: wrap || !row ? 150 : 0,
+              lineHeight: 1.5,
+              zIndex: '1',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {`Photo ${id}: lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}
+          </p>
         </div>
         <SatoriEscape style={{ width: '100%' }}>
           <div className='my-6 text-slate-600 text-sm pb-8 text-center max-w-md mx-auto leading-6'>
