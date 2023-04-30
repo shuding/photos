@@ -1,8 +1,10 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@babel/runtime': ^7.21.5
   autoprefixer: 10.4.14
   framer-motion: ^10.12.4
+  intl-segmenter-polyfill: ^0.4.4
   next: 13.3.1
   postcss: 8.4.23
   react: 18.2.0
@@ -11,8 +13,10 @@ specifiers:
   tailwindcss: 3.3.1
 
 dependencies:
+  '@babel/runtime': 7.21.5
   autoprefixer: 10.4.14_postcss@8.4.23
   framer-motion: 10.12.4_biqbaboplfbrettd7655fr4n2y
+  intl-segmenter-polyfill: 0.4.4
   next: 13.3.1_biqbaboplfbrettd7655fr4n2y
   postcss: 8.4.23
   react: 18.2.0
@@ -21,6 +25,13 @@ dependencies:
   tailwindcss: 3.3.1_postcss@8.4.23
 
 packages:
+
+  /@babel/runtime/7.21.5:
+    resolution: {integrity: sha512-8jI69toZqqcsnqGGqwGS4Qb1VwLOEp4hz+CXPywcvjs60u3B4Pom/U/7rm4W8tMOYEB+E9wgD0mW1l3r8qlI9Q==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@emotion/is-prop-valid/0.8.8:
     resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
@@ -372,6 +383,10 @@ packages:
       micromatch: 4.0.5
     dev: false
 
+  /fast-text-encoding/1.0.6:
+    resolution: {integrity: sha512-VhXlQgj9ioXCqGstD37E/HBeqEGV/qOD/kmbVG8h5xKBYvM1L3lR1Zn4555cQ8GkYbJa8aJSipLPndE1k6zK2w==}
+    dev: false
+
   /fastq/1.15.0:
     resolution: {integrity: sha512-wBrocU2LCXXa+lWBt8RoIRD89Fi8OdABODa/kEnyeyjS5aZO5/GNvI5sEINADqP/h8M29UHTHUb53sUu5Ihqdw==}
     dependencies:
@@ -473,6 +488,12 @@ packages:
 
   /inherits/2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+    dev: false
+
+  /intl-segmenter-polyfill/0.4.4:
+    resolution: {integrity: sha512-dIOcmvH+Q1WYGkjMqxPfaCgHEwOegH5UPcd/LLeaeY8aguHadC46MzGb40q8C1LrsuyJxJGKeKqoVtIh9ADRXQ==}
+    dependencies:
+      fast-text-encoding: 1.0.6
     dev: false
 
   /is-binary-path/2.1.0:
@@ -799,6 +820,10 @@ packages:
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
+    dev: false
+
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
     dev: false
 
   /resolve/1.22.2:

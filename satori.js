@@ -5,6 +5,21 @@ import { findDOMNode } from 'react-dom'
 import satori from 'satori'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { createIntlSegmenterPolyfill } from 'intl-segmenter-polyfill'
+
+if (typeof window !== 'undefined') {
+  ;(async function () {
+    const Segmenter = await createIntlSegmenterPolyfill(
+      fetch('/break_iterator.wasm')
+    )
+
+    if (typeof window.Intl === 'undefined') {
+      window.Intl = {}
+    }
+    window.Intl.Segmenter = Segmenter
+  })()
+}
+
 async function init() {
   if (typeof window === 'undefined') return []
 
