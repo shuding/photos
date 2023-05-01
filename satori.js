@@ -53,7 +53,7 @@ export function SatoriBoundary({ children }) {
         width: '100%',
         height: '100%',
         perspective: 1000,
-        contain: 'style layout size',
+        contain: 'style size',
       }}
     >
       <Container content={children}>
@@ -319,7 +319,7 @@ function SatoriImpl({ container, children }) {
             y: node.top,
             display: 'block',
             willChange: 'width, height, opacity, transform',
-            contain: 'style layout',
+            contain: 'style',
           }
 
           if (node.props.__kind === 'escape') {
