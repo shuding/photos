@@ -319,7 +319,7 @@ function SatoriImpl({ container, children }) {
             y: node.top,
             display: 'block',
             willChange: 'width, height, opacity, transform',
-            contain: 'style layout size',
+            contain: 'style layout',
           }
 
           if (node.props.__kind === 'escape') {
