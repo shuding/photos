@@ -164,6 +164,7 @@ function SatoriImpl({ container, children }) {
     width: 0,
     height: 0,
   })
+  const prevNodesRef = React.useRef([])
 
   React.useEffect(() => {
     if (!container) return
@@ -201,93 +202,94 @@ function SatoriImpl({ container, children }) {
       })
 
       if (cancelled) return
-      setCurrentState((prevNodes) => {
-        const prevNodesByKey = {}
-        for (const node of prevNodes) {
-          const k = node.originalKey
-          if (typeof k === 'string') {
-            const keys = k.split(' ')
-            for (const key of keys) {
-              if (!prevNodesByKey[key]) prevNodesByKey[key] = []
-              prevNodesByKey[key].push(node)
-            }
+
+      const prevNodes = prevNodesRef.current
+      const prevNodesByKey = {}
+      for (const node of prevNodes) {
+        const k = node.originalKey
+        if (typeof k === 'string') {
+          const keys = k.split(' ')
+          for (const key of keys) {
+            if (!prevNodesByKey[key]) prevNodesByKey[key] = []
+            prevNodesByKey[key].push(node)
           }
         }
+      }
 
-        const matchedNodes = new Set()
-        const returnNodes = []
+      const matchedNodes = new Set()
+      const returnNodes = []
 
-        while (true) {
-          let matched = false
-          let totalBestMatch = 0
-          let a = null
-          let b = null
+      while (true) {
+        let matched = false
+        let totalBestMatch = 0
+        let a = null
+        let b = null
 
-          for (const node of nodes) {
-            if (matchedNodes.has(node)) continue
-            if (typeof node.key === 'string') {
-              const nodeCnt = new WeakMap()
-              const keys = node.key.split(' ')
+        for (const node of nodes) {
+          if (matchedNodes.has(node)) continue
+          if (typeof node.key === 'string') {
+            const nodeCnt = new WeakMap()
+            const keys = node.key.split(' ')
 
-              let mappedNode = null
-              let bestMatch = 0
+            let mappedNode = null
+            let bestMatch = 0
 
-              for (const key of keys) {
-                if (prevNodesByKey[key]) {
-                  for (const prevNode of prevNodesByKey[key]) {
-                    if (matchedNodes.has(prevNode)) continue
-                    const cnt = nodeCnt.get(prevNode) || 0
-                    nodeCnt.set(prevNode, cnt + 1)
-                    if (cnt + 1 > bestMatch) {
-                      mappedNode = prevNode
-                      bestMatch = cnt + 1
-                    }
+            for (const key of keys) {
+              if (prevNodesByKey[key]) {
+                for (const prevNode of prevNodesByKey[key]) {
+                  if (matchedNodes.has(prevNode)) continue
+                  const cnt = nodeCnt.get(prevNode) || 0
+                  nodeCnt.set(prevNode, cnt + 1)
+                  if (cnt + 1 > bestMatch) {
+                    mappedNode = prevNode
+                    bestMatch = cnt + 1
                   }
                 }
               }
+            }
 
-              if (mappedNode) {
-                if (bestMatch > totalBestMatch) {
-                  totalBestMatch = bestMatch
-                  a = node
-                  b = mappedNode
-                }
-                matched = true
-              } else {
-                if (!matchedNodes.has(node)) {
-                  const newNode = {
-                    ...node,
-                    originalKey: node.key,
-                    key: Math.random(),
-                  }
-                  returnNodes.push(newNode)
-                  matchedNodes.add(node)
-                  matchedNodes.add(newNode)
-                }
+            if (mappedNode) {
+              if (bestMatch > totalBestMatch) {
+                totalBestMatch = bestMatch
+                a = node
+                b = mappedNode
               }
+              matched = true
             } else {
               if (!matchedNodes.has(node)) {
-                returnNodes.push(node)
+                const newNode = {
+                  ...node,
+                  originalKey: node.key,
+                  key: Math.random(),
+                }
+                returnNodes.push(newNode)
                 matchedNodes.add(node)
+                matchedNodes.add(newNode)
               }
             }
+          } else {
+            if (!matchedNodes.has(node)) {
+              returnNodes.push(node)
+              matchedNodes.add(node)
+            }
           }
-
-          if (matched) {
-            returnNodes.push({
-              ...a,
-              originalKey: a.key,
-              key: b.key,
-            })
-            matchedNodes.add(a)
-            matchedNodes.add(b)
-          }
-
-          if (!matched) break
         }
 
-        return returnNodes
-      })
+        if (matched) {
+          returnNodes.push({
+            ...a,
+            originalKey: a.key,
+            key: b.key,
+          })
+          matchedNodes.add(a)
+          matchedNodes.add(b)
+        }
+
+        if (!matched) break
+      }
+
+      prevNodesRef.current = returnNodes
+      setCurrentState(returnNodes)
       // setDebug(svg)
     })()
 
@@ -301,6 +303,7 @@ function SatoriImpl({ container, children }) {
       <AnimatePresence>
         {currentState.map((node, i) => {
           const Type = motion[node.type]
+          console.log(node)
           const styles = {
             position: 'absolute',
             ...node.props.style,
@@ -308,10 +311,12 @@ function SatoriImpl({ container, children }) {
             maxWidth: 'initial',
             minHeight: 'initial',
             minWidth: 'initial',
-            top: node.top,
-            left: node.left,
+            top: 0,
+            left: 0,
             width: node.width,
             height: node.height,
+            x: node.left,
+            y: node.top,
             display: 'block',
             willChange: 'top, left, width, height, opacity, transform',
           }
@@ -374,16 +379,35 @@ function SatoriImpl({ container, children }) {
                   ...styles,
                   transition: {
                     zIndex: {
-                      delay: 0.5,
+                      delay: 1,
                     },
                   },
                 },
                 exit: {
-                  opacity: 0,
                   ...styles,
+                  // scaleY: 0,
+                  opacity: 0,
+                  height: 0,
+                  width: 0,
+                  y: 0,
+                  pointerEvents: 'none',
                   transition: {
+                    type: 'tween',
+                    duration: 0.3,
+                    opacity: {
+                      delay: 0,
+                    },
                     zIndex: {
-                      delay: 0.5,
+                      delay: 0,
+                    },
+                    height: {
+                      delay: 0.9,
+                    },
+                    width: {
+                      delay: 0.9,
+                    },
+                    y: {
+                      delay: 0.9,
                     },
                   },
                 },
@@ -397,15 +421,15 @@ function SatoriImpl({ container, children }) {
                 type: 'spring',
                 damping: 17,
                 mass: 0.3,
-                velocity: -4,
+                velocity: 0,
                 stiffness: 100,
                 zIndex: {
-                  delay: 0.8,
+                  delay: 1,
                 },
                 opacity: {
                   type: 'tween',
-                  duration: 0.8,
-                  delay: Math.random() * 0.3,
+                  duration: 0.25,
+                  delay: Math.random() * 0.25,
                 },
               }}
               initial='initial'

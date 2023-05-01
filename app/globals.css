@@ -18,10 +18,13 @@ body {
     rgb(var(--background-start-rgb));
   background-attachment: fixed;
   text-underline-position: from-font;
+  scroll-behavior: smooth;
 }
 
 img {
   max-width: unset;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
 }
 
 *::selection {

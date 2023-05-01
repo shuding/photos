@@ -72,12 +72,13 @@ export default function Photo({ params: { id } }) {
                   }),
               borderRadius: 10,
               objectFit: 'cover',
-              zIndex: '2',
+              zIndex: 100,
               boxShadow: 'rgba(14, 21, 72, 0.45) 0px 25px 36px -12px',
               transformStyle: 'preserve-3d',
-              transform: row
-                ? `rotateX(0deg) rotateY(8deg)`
-                : 'rotateX(-3deg) rotateY(0deg)',
+              rotateX: 0,
+              rotateY: row ? 8 : 0,
+              z: 30,
+              scale: 1,
             }}
           />
           <p
@@ -88,7 +89,7 @@ export default function Photo({ params: { id } }) {
               maxWidth: '100%',
               minHeight: wrap || !row ? 150 : 0,
               // lineHeight: 1.5,
-              zIndex: '1',
+              zIndex: 1,
               display: 'flex',
               flexDirection: 'column',
             }}

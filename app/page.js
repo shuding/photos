@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SatoriAnimated, SatoriEscape } from '@/satori'
 
 const isTouchDevice =
@@ -10,12 +10,27 @@ const isTouchDevice =
     navigator.maxTouchPoints > 0 ||
     navigator.msMaxTouchPoints > 0)
 
+let scrollAnimation
+function smoothToTop() {
+  const position = document.body.scrollTop || document.documentElement.scrollTop
+  if (position > 0.01) {
+    window.scrollBy(0, -Math.max(0.2, Math.floor(position / 4.5)))
+    scrollAnimation = requestAnimationFrame(smoothToTop)
+  } else {
+    cancelAnimationFrame(scrollAnimation)
+  }
+}
+
 export default function Photos() {
   const Router = useRouter()
+  const [pressedPhoto, setPressedPhoto] = useState(null)
   const [focusedPhoto, setFocusedPhoto] = useState(null)
   const [row, setRow] = useState(
     (typeof window === 'undefined' ? 0 : window.innerWidth) > 960
   )
+  const touchStartRef = useRef(null)
+  const touchMovedRef = useRef(false)
+  const touchStartId = useRef(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,20 +90,56 @@ export default function Photos() {
                       : 150
                     : '100%',
                   height: row ? 380 : focusedPhoto === i ? 200 : 120,
-                  borderRadius: 0,
+                  borderRadius: 2,
                   objectFit: 'cover',
                   boxShadow: '0 10px 20px -8px rgba(14, 21, 72, 0.45)',
-                  zIndex: '1',
-                  transform: 'rotateX(0deg) rotateY(0deg)',
+                  zIndex: 1,
+                  rotateX: 0,
+                  rotateY: 0,
+                  z: 0,
+                  scale: pressedPhoto === i ? 0.95 : 1,
                 }}
                 onPointerUp={() => {
+                  if (
+                    (touchStartRef.current &&
+                      Date.now() - touchStartRef.current > 250) ||
+                    touchMovedRef.current
+                  ) {
+                    // Cancelled
+                    return
+                  }
                   Router.push(`/${i + 1}`)
-                  //setTimeout(() => {
-                  window.scrollTo({ top: 0, behavior: 'smooth' })
-                  // }, 100)
+                  smoothToTop()
                 }}
+                onMouseDown={() => setPressedPhoto(i)}
+                onMouseUp={() => setPressedPhoto(null)}
+                onMouseOut={() => setPressedPhoto(null)}
                 onMouseEnter={() => !isTouchDevice && setFocusedPhoto(i)}
                 onMouseLeave={() => !isTouchDevice && setFocusedPhoto(null)}
+                onTouchStart={() => {
+                  setPressedPhoto(i)
+                  touchStartRef.current = Date.now()
+                  touchMovedRef.current = false
+                  const touchId = Math.random()
+                  touchStartId.current = touchId
+                  setTimeout(() => {
+                    if (
+                      !touchMovedRef.current &&
+                      touchId === touchStartId.current
+                    ) {
+                      setFocusedPhoto(i)
+                      setPressedPhoto(null)
+                    }
+                  }, 250)
+                }}
+                onTouchEnd={() => {
+                  setPressedPhoto(null)
+                  touchStartId.current = null
+                  setFocusedPhoto(null)
+                }}
+                onTouchMove={() => {
+                  touchMovedRef.current = true
+                }}
               />
             ))}
           {row ? null : (
