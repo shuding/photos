@@ -378,15 +378,10 @@ function SatoriImpl({ container, children }) {
                 initial: {
                   opacity: 0,
                   ...styles,
-                  transition: {
-                    zIndex: {
-                      delay: 1,
-                    },
-                  },
+                  transition: {},
                 },
                 exit: {
                   ...styles,
-                  // scaleY: 0,
                   opacity: 0,
                   height: 0,
                   width: 0,
@@ -396,9 +391,6 @@ function SatoriImpl({ container, children }) {
                     type: 'tween',
                     duration: 0.3,
                     opacity: {
-                      delay: 0,
-                    },
-                    zIndex: {
                       delay: 0,
                     },
                     height: {
@@ -424,14 +416,17 @@ function SatoriImpl({ container, children }) {
                 mass: 0.3,
                 velocity: 0,
                 stiffness: 100,
-                zIndex: {
-                  delay: 1,
-                },
                 opacity: {
                   type: 'tween',
                   duration: 0.25,
                   delay: Math.random() * 0.25,
                 },
+                zIndex: {
+                  delay: 0.8,
+                },
+              }}
+              transitionEnd={{
+                zIndex: styles.zIndex,
               }}
               initial='initial'
               exit='exit'

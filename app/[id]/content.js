@@ -72,7 +72,7 @@ export default function Photo({ params: { id } }) {
                   }),
               borderRadius: 10,
               objectFit: 'cover',
-              zIndex: 100,
+              zIndex: 2,
               boxShadow: 'rgba(14, 21, 72, 0.45) 0px 25px 36px -12px',
               transformStyle: 'preserve-3d',
               rotateX: 0,
@@ -80,7 +80,7 @@ export default function Photo({ params: { id } }) {
               z: 30,
               scale: 1,
             }}
-            decoding='async'
+            decoding='sync'
           />
           <p
             key='photo-description'

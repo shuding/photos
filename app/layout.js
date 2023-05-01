@@ -1,8 +1,9 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Link from 'next/link'
 
+import Link from 'next/link'
 import { SatoriBoundary } from '@/satori'
+import { PhotoLink } from './photo-link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,17 +11,6 @@ export const metadata = {
   title: 'Shu’s Photos',
   description:
     'Fluid transitions with Satori, Next.js App Router and Framer Motion.',
-}
-
-function PhotoLink({ id }) {
-  return (
-    <Link
-      href={`/${id}`}
-      className='px-1.5 text-slate-700 hover:text-blue-600 tracking-tight'
-    >
-      Photo {id}
-    </Link>
-  )
 }
 
 export default function RootLayout({ children }) {
