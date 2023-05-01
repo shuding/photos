@@ -80,6 +80,7 @@ export default function Photo({ params: { id } }) {
               z: 30,
               scale: 1,
             }}
+            decoding='async'
           />
           <p
             key='photo-description'

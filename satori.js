@@ -53,6 +53,7 @@ export function SatoriBoundary({ children }) {
         width: '100%',
         height: '100%',
         perspective: 1000,
+        contain: 'style layout size',
       }}
     >
       <Container content={children}>
@@ -303,7 +304,6 @@ function SatoriImpl({ container, children }) {
       <AnimatePresence>
         {currentState.map((node, i) => {
           const Type = motion[node.type]
-          console.log(node)
           const styles = {
             position: 'absolute',
             ...node.props.style,
@@ -318,7 +318,8 @@ function SatoriImpl({ container, children }) {
             x: node.left,
             y: node.top,
             display: 'block',
-            willChange: 'top, left, width, height, opacity, transform',
+            willChange: 'width, height, opacity, transform',
+            contain: 'style layout size',
           }
 
           if (node.props.__kind === 'escape') {

@@ -140,6 +140,7 @@ export default function Photos() {
                 onTouchMove={() => {
                   touchMovedRef.current = true
                 }}
+                decoding='async'
               />
             ))}
           {row ? null : (
