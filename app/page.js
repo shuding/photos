@@ -30,7 +30,7 @@ export default function Photos() {
   )
   const touchStartRef = useRef(null)
   const touchMovedRef = useRef(false)
-  const touchStartId = useRef(null)
+  const mousedownRef = useRef(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -101,8 +101,8 @@ export default function Photos() {
                 }}
                 onPointerUp={() => {
                   if (
-                    (touchStartRef.current &&
-                      Date.now() - touchStartRef.current > 250) ||
+                    // (touchStartRef.current &&
+                    //   Date.now() - touchStartRef.current > 250) ||
                     touchMovedRef.current
                   ) {
                     // Cancelled
@@ -111,31 +111,38 @@ export default function Photos() {
                   Router.push(`/${i + 1}`)
                   smoothToTop()
                 }}
-                onMouseDown={() => setPressedPhoto(i)}
-                onMouseUp={() => setPressedPhoto(null)}
+                onMouseDown={() => {
+                  setPressedPhoto(i)
+                  mousedownRef.current = true
+                }}
+                onMouseUp={() => {
+                  setPressedPhoto(null)
+                  mousedownRef.current = false
+                }}
                 onMouseOut={() => setPressedPhoto(null)}
-                onMouseEnter={() => !isTouchDevice && setFocusedPhoto(i)}
+                onMouseEnter={() => {
+                  !isTouchDevice && setFocusedPhoto(i)
+                  mousedownRef.current && setPressedPhoto(i)
+                }}
                 onMouseLeave={() => !isTouchDevice && setFocusedPhoto(null)}
                 onTouchStart={() => {
                   setPressedPhoto(i)
                   touchStartRef.current = Date.now()
                   touchMovedRef.current = false
-                  const touchId = Math.random()
-                  touchStartId.current = touchId
-                  setTimeout(() => {
-                    if (
-                      !touchMovedRef.current &&
-                      touchId === touchStartId.current
-                    ) {
-                      setFocusedPhoto(i)
-                      setPressedPhoto(null)
-                    }
-                  }, 250)
+                  // const touchId = Math.random()
+                  // touchStartId.current = touchId
+                  // setTimeout(() => {
+                  //   if (
+                  //     !touchMovedRef.current &&
+                  //     touchId === touchStartId.current
+                  //   ) {
+                  //     setPressedPhoto(null)
+                  //   }
+                  // }, 250)
                 }}
                 onTouchEnd={() => {
                   setPressedPhoto(null)
-                  touchStartId.current = null
-                  setFocusedPhoto(null)
+                  // touchStartId.current = null
                 }}
                 onTouchMove={() => {
                   touchMovedRef.current = true
